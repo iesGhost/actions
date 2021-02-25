@@ -5,29 +5,29 @@ on:
     branches:
       - master
 
-    jobs:
-      build:
-        runs-on: ubuntu-latest
-        steps:
-          # Checks-out your repository under $GITHUB_WORKSPACE, 
-          # so your workflow can access it
-          - uses: actions/checkout@master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, 
+      # so your workflow can access it
+      - uses: actions/checkout@master
 
-          # Build your static website with Eleventy
-          - name: Build Eleventy
-            uses: TartanLlama/actions-eleventy@master
-            with:
-              args: --output html
-              install_dependencies: true
+      # Build your static website with Eleventy
+      - name: Build Eleventy
+        uses: TartanLlama/actions-eleventy@master
+        with:
+          args: --output html
+          install_dependencies: true
 
-          # Copying files and artifacts via SSH
-          - name: Copying files to server
-            uses: appleboy/scp-action@master
-            with:
-              host: ${{ secrets.SERVER_IP2 }} 
-              username: ${{ secrets.SERVER_USERNAME2 }}
-              password: ${{ secrets.SERVER_PASSWORD2 }}
-           
-              rm: true
-              source: "html/"
-              target: "${{ secrets.PROJECT_PATH2 }}"
+      # Copying files and artifacts via SSH
+      - name: Copying files to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_IP2 }} 
+          username: ${{ secrets.SERVER_USERNAME2 }}
+          password: ${{ secrets.SERVER_PASSWORD2 }}
+       
+          rm: true
+          source: "html/"
+          target: "${{ secrets.PROJECT_PATH2 }}"
